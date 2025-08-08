@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediabono - ملفات اليوتيوبر</title>
+    <style>
+        /* Reset وتنسيقات عامة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* التصميم العام */
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* الشريط العلوي */
+        .navbar {
+            background: linear-gradient(90deg, #000, #0a3d0a, #000);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 255, 0, 0.3);
+            transition: all 0.5s ease;
+        }
+        
+        .navbar:hover {
+            background: linear-gradient(90deg, #000, #0e5a0e, #000);
+        }
+        
+        .nav-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .nav-icon {
+            color: #00ff00;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .nav-icon:hover {
+            transform: scale(1.2);
+            color: #ffffff;
+        }
+        
+        .nav-icon span {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        /* الصفحات */
+        .page {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+            background: radial-gradient(circle at center, #000, #0a1a0a);
+        }
+        
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* الصفحة الأولى */
+        #home {
+            background: url('https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+        
+        #home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .home-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #00ff00, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+        
+        .tiktok-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #00ff00, #008000);
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .tiktok-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 255, 0, 0.6);
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+        }
+        
+        /* الصفحة الثانية */
+        #welcome {
+            background: linear-gradient(135deg, #000000, #0a2a0a);
+        }
+        
+        .welcome-content {
+            text-align: center;
+            max-width: 800px;
+        }
+        
+        .welcome-title {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .welcome-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            color: #ddd;
+        }
+        
+        .scroll-down {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            cursor: pointer;
+            color: #00ff00;
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-down:hover {
+            color: #ffffff;
+        }
+        
+        .scroll-down i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* الصفحة الثالثة */
+        #downloads {
+            background: linear-gradient(135deg, #0a1a0a, #000000);
+        }
+        
+        .downloads-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            max-width: 1000px;
+        }
+        
+        .download-card {
+            background: rgba(10, 40, 10, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            width: 280px;
+            text-align: center;
+            transition: all 0.5s ease;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(0, 255, 0, 0),
+                rgba(0, 255, 0, 0),
+                rgba(0, 255, 0, 0.3),
+                rgba(0, 255, 0, 0)
+            );
+            transform: rotate(30deg);
+            transition: all 0.7s ease;
+        }
+        
+        .download-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 255, 0, 0.3);
+            border: 1px solid rgba(0, 255, 0, 0.7);
+        }
+        
+        .download-card:hover::before {
+            top: 0;
+            left: 0;
+            transform: rotate(0);
+        }
+        
+        .download-icon {
+            font-size: 3rem;
+            color: #00ff00;
+            margin-bottom: 20px;
+        }
+        
+        .download-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .download-desc {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background: linear-gradient(45deg, #00ff00, #008800);
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .download-btn:hover {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.4);
+        }
+        
+        /* تأثيرات الانتقال بين الصفحات */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #00ff00;
+            z-index: 9999;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        
+        .page-transition.active {
+            transform: scaleY(1);
+            transform-origin: top;
+        }
+        
+        /* التذييل */
+        footer {
+            background: linear-gradient(90deg, #000, #0a3d0a, #000);
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
+    <!-- خط Tajawal للغة العربية -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- تأثير الانتقال بين الصفحات -->
+    <div class="page-transition"></div>
+    
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <div class="nav-icons">
+            <a href="#home" class="nav-icon" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>الرئيسية</span>
+            </a>
+            <a href="#welcome" class="nav-icon" data-page="welcome">
+                <i class="fas fa-handshake"></i>
+                <span>ترحيب</span>
+            </a>
+            <a href="#downloads" class="nav-icon" data-page="downloads">
+                <i class="fas fa-download"></i>
+                <span>تنزيلات</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- الصفحة الرئيسية -->
+    <section id="home" class="page active">
+        <div class="home-content">
+            <h1 class="logo">Mediabono</h1>
+            <p class="description">
+                مرحبًا بك في موقع Mediabono الرسمي. هنا ستجد كل الملفات والتطبيقات التي أشاركها مع متابعيني على التيك توك.
+                للوصول إلى المحتوى، يرجى زيارة قناتنا على التيك توك أولاً.
+            </p>
+            <a href="https://www.tiktok.com/" target="_blank" class="tiktok-btn">
+                <i class="fab fa-tiktok"></i> زيارة قناة التيك توك
+            </a>
+        </div>
+    </section>
+    
+    <!-- صفحة الترحيب -->
+    <section id="welcome" class="page">
+        <div class="welcome-content">
+            <h2 class="welcome-title">أهلاً وسهلاً بك!</h2>
+            <p class="welcome-text">
+                شكراً لزيارتك موقع Mediabono. نحن نقدم لك أفضل الملفات والتطبيقات التي تساعدك في إنشاء محتوى مبدع.
+                يمكنك تنزيل ما تحتاجه من خلال الأيقونات أدناه. كل الملفات مجانية وآمنة للاستخدام.
+            </p>
+            
+            <div class="scroll-down" id="scrollDown">
+                <i class="fas fa-arrow-down"></i>
+                <span>انزل للأسفل</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- صفحة التنزيلات -->
+    <section id="downloads" class="page">
+        <div class="downloads-container">
+            <!-- كاب كات برو -->
+            <div class="download-card">
+                <div class="download-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3 class="download-title">كاب كات برو</h3>
+                <p class="download-desc">
+                    الإصدار الاحترافي من تطبيق كاب كات مع جميع الميزات المميزة والجودة العالية.
+                </p>
+                <a href="YOUR_DOWNLOAD_LINK_1" class="download-btn">تنزيل الآن</a>
+            </div>
+            
+            <!-- حزمة الأصوات -->
+            <div class="download-card">
+                <div class="download-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h3 class="download-title">حزمة الأصوات</h3>
+                <p class="download-desc">
+                    مجموعة مميزة من الأصوات والمؤثرات الصوتية لمقاطعك، جاهزة للاستخدام الفوري.
+                </p>
+                <a href="YOUR_DOWNLOAD_LINK_2" class="download-btn">تنزيل الآن</a>
+            </div>
+            
+            <!-- خلفيات متحركة -->
+            <div class="download-card">
+                <div class="download-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h3 class="download-title">خلفيات متحركة</h3>
+                <p class="download-desc">
+                    مجموعة من الخلفيات المتحركة عالية الجودة لاستخدامها في المونتاج والإنتاج.
+                </p>
+                <a href="YOUR_DOWNLOAD_LINK_3" class="download-btn">تنزيل الآن</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- التذييل -->
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2023 Mediabono</p>
+    </footer>
+    
+    <script>
+        // الانتقال بين الصفحات
+        document.querySelectorAll('.nav-icon').forEach(icon => {
+            icon.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-page');
+                
+                // تنشيط تأثير الانتقال
+                const transition = document.querySelector('.page-transition');
+                transition.classList.add('active');
+                
+                setTimeout(() => {
+                    // إخفاء جميع الصفحات
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // إظهار الصفحة المطلوبة
+                    document.getElementById(targetPage).classList.add('active');
+                    
+                    // إخفاء تأثير الانتقال
+                    setTimeout(() => {
+                        transition.classList.remove('active');
+                    }, 100);
+                }, 700);
+                
+                // التمرير إلى الأعلى
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // التمرير لأسفل في صفحة الترحيب
+        document.getElementById('scrollDown').addEventListener('click', function() {
+            const downloadsSection = document.getElementById('downloads');
+            downloadsSection.scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+        
+        // تأثيرات عند التمرير
+        window.addEventListener('scroll', function() {
+            const pages = document.querySelectorAll('.page');
+            const scrollPosition = window.scrollY + window.innerHeight / 1.5;
+            
+            pages.forEach(page => {
+                const pageTop = page.offsetTop;
+                const pageHeight = page.offsetHeight;
+                
+                if (scrollPosition > pageTop && scrollPosition < pageTop + pageHeight) {
+                    page.classList.add('active');
+                }
+            });
+        });
+        
+        // تنشيط الصفحة الحالية عند التحميل
+        window.addEventListener('load', function() {
+            const homePage = document.getElementById('home');
+            homePage.classList.add('active');
+        });
+    </script>
+</body>
+</html>
